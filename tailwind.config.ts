@@ -1,15 +1,22 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+import type { Config } from "tailwindcss";
+import daisyui0 from "daisyui";
+
+export default {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        background: "var(--background)",
+        foreground: "var(--foreground)",
+      },
+    },
   },
   plugins: [
-    require('daisyui'),
+    daisyui0,
   ],
   daisyui: {
     themes: [
@@ -47,5 +54,4 @@ module.exports = {
       "sunset",
     ],
   },
-}
-
+} satisfies Config;
