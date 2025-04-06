@@ -11,13 +11,14 @@ export async function checkAndAddUser(email: string) {
         email: email,
       },
     });
-    
+    const name = "";
     console.log(existingUser);
 
     if (!existingUser) {
       await prisma.user.create({
         data: {
-          email
+          email,
+          name
         },
       });
     }
