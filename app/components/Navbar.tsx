@@ -17,8 +17,8 @@ const Navbar = () => {
   ];
 
   useEffect(() => {
-    if(user?.primaryEmailAddress?.emailAddress && user.fullName) {
-        checkAndAddUser(user?.primaryEmailAddress?.emailAddress, user.fullName)
+    if(user?.primaryEmailAddress?.emailAddress) {
+        checkAndAddUser(user?.primaryEmailAddress?.emailAddress)
     }
   }, [user])
 
@@ -51,7 +51,6 @@ const Navbar = () => {
             In<span className="text-accent">Voice</span>
           </span>
         </div>
-
         <div className="flex space-x-4 items-center">
           {renderLinks("btn")}
           <UserButton />

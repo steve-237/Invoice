@@ -10,6 +10,10 @@ declare const globalThis: {
 
 const prisma = globalThis.prismaGlobal ?? prismaClientSingleton();
 
+prisma.$connect()
+  .then(() => console.log('Connected to database'))
+  .catch((err: string) => console.error('Database connection error:', err));
+
 export default prisma;
 
 if (process.env.NODE_ENV !== "production") globalThis.prismaGlobal = prisma;
