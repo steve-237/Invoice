@@ -1,5 +1,6 @@
 "use client";
 import { getInvoiceById } from "@/app/actions";
+import InvoiceInfo from "@/app/components/invoiceInfo";
 import Wrapper from "@/app/components/Wrapper";
 import { Invoice } from "@/type";
 import { Trash } from "lucide-react";
@@ -26,6 +27,12 @@ const Page = ({ params }: { params: Promise<{ invoiceId: string }> }) => {
     fetchInvoice();
   }, []);
 
+  if(!invoice) return (
+    <div className="flex justify-center items-center h-screen w-full">
+      <span className="font-bold">Facture Non Trouvee</span>
+    </div>
+  )
+
   return (
     <Wrapper>
       <div>
@@ -51,7 +58,19 @@ const Page = ({ params }: { params: Promise<{ invoiceId: string }> }) => {
             </button>
           </div>
         </div>
-        <div></div>
+        <div>
+          <div className="flex w-full md:w-1/3 flex-col">
+            <div className="mb-4 bg-base-200 rounded-xl p-5">
+              <div>
+                <div className="badge badge-accent">Resume des Totaux</div>
+              </div>
+            </div>
+            <InvoiceInfo invoice={invoice} setInvoice={setInvoice}/>
+          </div>
+          <div className="flex w-full md:w-2/3 flex-col">
+
+          </div>
+        </div>
       </div>
     </Wrapper>
   );
