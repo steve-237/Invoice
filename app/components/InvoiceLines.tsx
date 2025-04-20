@@ -41,6 +41,11 @@ const InvoiceLines: React.FC<Props> = ({ invoice, setInvoice }) => {
     setInvoice({ ...invoice, lines: updatedLines });
   };
 
+  const handleRemoveLine = (index: number) => {
+    const updatedLines = invoice.lines.filter((_, i) => i !== index);
+    setInvoice({ ...invoice, lines: updatedLines });
+  };
+
   return (
     <div className="h-fit bg-base-200 p-5 rounded-xl w-full">
       <div className="flex justify-between items-center mb-4">
@@ -102,7 +107,9 @@ const InvoiceLines: React.FC<Props> = ({ invoice, setInvoice }) => {
                   {(line.quantity * line.unitPrice).toFixed(2)} $
                 </td>
                 <td>
-                  <button className="btn btn-sm btn-circle btn-accent">
+                  <button 
+                  onClick={() => handleRemoveLine(index)}
+                  className="btn btn-sm btn-circle btn-accent">
                     <Trash className="w-4" />
                   </button>
                 </td>
