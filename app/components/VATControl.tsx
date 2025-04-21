@@ -38,6 +38,7 @@ const VATControl: React.FC<Props> = ({ invoice, setInvoice }) => {
           value={invoice.vatRate}
           className="input input-sm input-bordered w-16 ml-2"
           onChange={handleVatRatChange}
+          min={0}
         />
       )}
     </div>
