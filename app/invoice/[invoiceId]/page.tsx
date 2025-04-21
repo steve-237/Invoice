@@ -1,17 +1,19 @@
 "use client";
-import { getInvoiceById } from "@/app/actions";
+import { getInvoiceById, updatedInvoice } from "@/app/actions";
 import InvoiceInfo from "@/app/components/invoiceInfo";
 import InvoiceLines from "@/app/components/InvoiceLines";
 import VATControl from "@/app/components/VATControl";
 import Wrapper from "@/app/components/Wrapper";
 import { Invoice, Totals } from "@/type";
-import { Trash } from "lucide-react";
+import { Save, Trash } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
 const Page = ({ params }: { params: Promise<{ invoiceId: string }> }) => {
   const [invoice, setInvoice] = useState<Invoice | null>(null);
   const [initialInvoice, setInitialInvoice] = useState<Invoice | null>(null);
   const [totals, setTotals] = useState<Totals | null>(null);
+  const [isSaveDisabled, setIsSaveDisabled] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchInvoice = async () => {
     try {
@@ -40,13 +42,35 @@ const Page = ({ params }: { params: Promise<{ invoiceId: string }> }) => {
     setTotals({ totalHT: ht, totalVAT: vat, totalTTC: ht + vat });
   }, [invoice]);
 
+  useEffect(() => {
+    setIsSaveDisabled(
+      JSON.stringify(invoice) === JSON.stringify(initialInvoice)
+    );
+  }, [invoice, initialInvoice]);
+
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newStatus = parseInt(e.target.value)
-    if(invoice){
-      const updateInvoice = {...invoice, status: newStatus}
-      setInvoice(updateInvoice)
+    const newStatus = parseInt(e.target.value);
+    if (invoice) {
+      const updateInvoice = { ...invoice, status: newStatus };
+      setInvoice(updateInvoice);
     }
-  }
+  };
+
+  const handleSave = async () => {
+    if (!invoice) return;
+    setIsLoading(true);
+    try {
+      await updatedInvoice(invoice);
+      const updateInvoice = await getInvoiceById(invoice.id);
+      if (updateInvoice) {
+        setInvoice(updateInvoice);
+        setInitialInvoice(updateInvoice);
+      }
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Erreur lors de la sauvegarde de la facture : ", error);
+    }
+  };
 
   if (!invoice || !totals)
     return (
@@ -75,7 +99,20 @@ const Page = ({ params }: { params: Promise<{ invoiceId: string }> }) => {
               <option value={4}>Annulee</option>
               <option value={5}>Impayee</option>
             </select>
-            <button className="btn btn-sm btn-accent ml-4">Sauvegarder</button>
+            <button
+              className="btn btn-sm btn-accent ml-4"
+              disabled={isSaveDisabled || isLoading}
+              onClick={handleSave}
+            >
+              {isLoading ? (
+                <span className="loading loading-spinner loading-sm"></span>
+              ) : (
+                <>
+                  Sauvegarder
+                  <Save className="w-4 ml-2"/>
+                </>
+              )}
+            </button>
             <button className="btn btn-sm btn-accent ml-4">
               <Trash className="w-4" />
             </button>
