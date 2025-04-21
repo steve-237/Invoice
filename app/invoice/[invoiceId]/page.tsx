@@ -1,11 +1,12 @@
 "use client";
-import { getInvoiceById, updatedInvoice } from "@/app/actions";
+import { deleteInvoice, getInvoiceById, updatedInvoice } from "@/app/actions";
 import InvoiceInfo from "@/app/components/invoiceInfo";
 import InvoiceLines from "@/app/components/InvoiceLines";
 import VATControl from "@/app/components/VATControl";
 import Wrapper from "@/app/components/Wrapper";
 import { Invoice, Totals } from "@/type";
 import { Save, Trash } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 const Page = ({ params }: { params: Promise<{ invoiceId: string }> }) => {
@@ -14,6 +15,7 @@ const Page = ({ params }: { params: Promise<{ invoiceId: string }> }) => {
   const [totals, setTotals] = useState<Totals | null>(null);
   const [isSaveDisabled, setIsSaveDisabled] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const fetchInvoice = async () => {
     try {
@@ -72,6 +74,20 @@ const Page = ({ params }: { params: Promise<{ invoiceId: string }> }) => {
     }
   };
 
+  const handleDelete = async () => {
+    const confirmed = window.confirm(
+      "Etes vous suur de supprimer cette facture?"
+    );
+    if (confirmed) {
+      try {
+        await deleteInvoice(invoice?.id as string);
+        router.push("/"); //redirige vers la page d acceuil du site
+      } catch (error) {
+        console.error("Erreur lors de la suppression de la facture.", error);
+      }
+    }
+  };
+
   if (!invoice || !totals)
     return (
       <div className="flex justify-center items-center h-screen w-full">
@@ -109,11 +125,14 @@ const Page = ({ params }: { params: Promise<{ invoiceId: string }> }) => {
               ) : (
                 <>
                   Sauvegarder
-                  <Save className="w-4 ml-2"/>
+                  <Save className="w-4 ml-2" />
                 </>
               )}
             </button>
-            <button className="btn btn-sm btn-accent ml-4">
+            <button
+              onClick={handleDelete}
+              className="btn btn-sm btn-accent ml-4"
+            >
               <Trash className="w-4" />
             </button>
           </div>
