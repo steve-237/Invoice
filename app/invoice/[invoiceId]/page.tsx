@@ -2,6 +2,7 @@
 import { deleteInvoice, getInvoiceById, updatedInvoice } from "@/app/actions";
 import InvoiceInfo from "@/app/components/invoiceInfo";
 import InvoiceLines from "@/app/components/InvoiceLines";
+import InvoicePDF from "@/app/components/InvoicePDF";
 import VATControl from "@/app/components/VATControl";
 import Wrapper from "@/app/components/Wrapper";
 import { Invoice, Totals } from "@/type";
@@ -166,6 +167,7 @@ const Page = ({ params }: { params: Promise<{ invoiceId: string }> }) => {
           </div>
           <div className="flex w-full md:w-2/3 flex-col md:ml-4">
             <InvoiceLines invoice={invoice} setInvoice={setInvoice} />
+            <InvoicePDF invoice={invoice} totals={totals} />
           </div>
         </div>
       </div>
