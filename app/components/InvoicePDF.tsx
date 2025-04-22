@@ -19,9 +19,9 @@ function formatDate(dateString: string): string {
 
 const InvoicePDF: React.FC<FacturePDFProps> = ({ invoice, totals }) => {
   return (
-    <div className="mt-4 hidden lg:block">
+    <div className="mt-4 hidden lg:block md:block">
       <div className="border-base-300 border-2 border-dashed rounded-xl p-5">
-        <button>
+        <button className="btn btn-sm btn-accent mb-4">
           Facture PDF
           <ArrowDownFromLine className="w-4" />
         </button>
@@ -53,8 +53,9 @@ const InvoicePDF: React.FC<FacturePDFProps> = ({ invoice, totals }) => {
                 {formatDate(invoice.dueDate)}
               </p>
             </div>
+          </div>
 
-            <div className="my-6 flex justify-between">
+          <div className="my-6 flex justify-between">
               <div>
                 <p className="badge badge-ghost mb-2">Emetteur</p>
                 <p className="text-sm font-bold italic">{invoice.issuerName}</p>
@@ -114,7 +115,7 @@ const InvoicePDF: React.FC<FacturePDFProps> = ({ invoice, totals }) => {
                 <div className="badge badge-accent">{totals.totalHT.toFixed(2)} $</div>
               </div>
             </div>
-          </div>
+
         </div>
       </div>
     </div>
