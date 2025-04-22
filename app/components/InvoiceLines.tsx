@@ -37,7 +37,7 @@ const InvoiceLines: React.FC<Props> = ({ invoice, setInvoice }) => {
 
   const handleUnitPriceChange = (index: number, value: string) => {
     const updatedLines = [...invoice.lines];
-    updatedLines[index].unitPrice = value === "" ? 0 : parseInt(value);
+    updatedLines[index].unitPrice = value === "" ? 0 : parseFloat(value);
     setInvoice({ ...invoice, lines: updatedLines });
   };
 
